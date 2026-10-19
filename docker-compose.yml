@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: taskflow-postgres
+    restart: always
+
+    environment:
+      POSTGRES_USER: taskflow_user
+      POSTGRES_PASSWORD: taskflow_password
+      POSTGRES_DB: taskflow
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Makes database data persistent.
+      # Without persistence, removing the container could remove database data.
+      # So if you stop/restart the container, your tasks remain.
+
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      
+
+volumes:
+  postgres_data:
